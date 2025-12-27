@@ -4,9 +4,17 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>MyTrip Planner — Plan & Book Your Adventure</title>
-  <link rel="stylesheet" href="style.css">  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" /></head>
-<body>
+  <link rel="stylesheet" href="style.css">  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    /* bg-image styling (overridden by inline style from script when image is provided) */
+    .bg-image{position:absolute;inset:0;background-size:cover;background-position:center center;filter:brightness(.95) saturate(.98) blur(0px);opacity:.92;transition:opacity .25s ease,filter .25s ease}
+    .bg-image.hidden{display:none}
+    @media (max-width:700px){ .bg-image{opacity:.55;filter:blur(8px) brightness(.9)} }
+  </style>
+</head>
+<body data-bg-image="assets/bg-trip.jpg">
   <div class="bg-clip" aria-hidden="true">
+    <div class="bg-image" aria-hidden="true"></div>
     <div class="bg-gradient"></div>
     <video id="bgVideo" class="bg-video hidden" autoplay muted loop playsinline></video>
     <div class="plane" aria-hidden="true">✈️</div>
