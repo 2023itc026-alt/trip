@@ -221,8 +221,43 @@ document.addEventListener('DOMContentLoaded', ()=>{
     if(grad) grad.style.opacity = '0.35'
   }
 
-  // Defensive adjustments for small screens
-  if(window.innerWidth <= 700){ const grad = document.querySelector('.bg-gradient'); if(grad) grad.style.filter = 'blur(12px)'; const pl = document.querySelector('.plane'); if(pl) pl.style.display = 'none' }
+  // Optional background image: set body data-bg-image="PATH" (e.g., assets/bg-trip.jpg). Prefer image on desktop.
+  const imgUrl = document.body.dataset.bgImage || ''
+  const bgImageEl = document.querySelector('.bg-image')
+
+  function loadImage(url){
+    return new Promise((resolve)=>{
+      const img = new Image()
+      img.onload = ()=>resolve(true)
+      img.onerror = ()=>resolve(false)
+      img.src = url
+    })
+  }
+
+  ;(async ()=>{
+    if(imgUrl && bgImageEl && window.innerWidth > 480){
+      const ok = await loadImage(imgUrl)
+      if(ok){
+        bgImageEl.style.backgroundImage = `url('${imgUrl}')`
+        bgImageEl.classList.remove('hidden')
+        const grad = document.querySelector('.bg-gradient')
+        if(grad) grad.style.opacity = '0.45'
+        console.log('Background image applied:', imgUrl)
+      } else {
+        console.warn('Local background image not found:', imgUrl)
+        // fallback to a free stock travel image
+        const fallback = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80'
+        const ok2 = await loadImage(fallback)
+        if(ok2){ bgImageEl.style.backgroundImage = `url('${fallback}')`; bgImageEl.classList.remove('hidden'); const grad = document.querySelector('.bg-gradient'); if(grad) grad.style.opacity = '0.45' }
+        else { console.warn('Fallback background also failed to load') }
+      }
+    } else if(bgImageEl){
+      bgImageEl.classList.add('hidden')
+    }
+
+    // Defensive adjustments for small screens
+    if(window.innerWidth <= 700){ const grad = document.querySelector('.bg-gradient'); if(grad) grad.style.filter = 'blur(12px)'; const pl = document.querySelector('.plane'); if(pl) pl.style.display = 'none' }
+  })()
 })
 
 // End of script.js
